@@ -1,0 +1,37 @@
+package bg.sofia.uni.fmi.mjt.client.constants;
+
+public final class CommandConstants {
+    public static final String GET_FOOD_CMD = "get-food";
+    public static final String GET_FOOD_REPORT_CMD = "get-food-report";
+    public static final String GET_FOOD_BY_BARCODE_CMD = "get-food-by-barcode";
+    public static final String QUIT_CMD = "quit";
+    public static final String HELP_CMD = "help";
+
+    public static final int NO_TOKENS = 0;
+    public static final int ONE_TOKEN = 1;
+    public static final int TWO_TOKENS = 2;
+    public static final int THREE_TOKENS = 3;
+
+    public static final int KEYWORD_TOKEN_INDEX = 0;
+    public static final int PARAM_TOKEN_INDEX = 1;
+    public static final int INVALID_TOKEN_INDEX = -1;
+
+    public static final String WHITESPACE_SPLIT_REGEX = "\\s+";
+    public static final char PARAMS_SPLIT_REGEX = '=';
+
+    public static final String CODE_PARAM = "--code";
+    public static final String IMG_PARAM = "--img";
+
+    public static final String DISPLAY_ALL_COMMANDS_MSG = """
+        Available commands:
+        - get-food <food_name>             : Searches for food items by name.
+        - get-food-report <food_fdcId>     : Retrieves detailed nutritional information for a food item.
+        - get-food-by-barcode 
+            --code=<gtinUpc_code>          : Looks up food by barcode.
+            --img=<image_file>             : Looks up food by image of the barcode.
+        - help                             : Show this help message again.
+        - quit                             : Exit the program.
+        """;
+
+    private CommandConstants() {}
+}

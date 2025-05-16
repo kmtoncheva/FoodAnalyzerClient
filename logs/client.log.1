@@ -1,0 +1,14 @@
+май 16, 2025 9:50:04 СЛ.ОБ. bg.sofia.uni.fmi.mjt.client.FoodAnalyzerClient start
+SEVERE: Client could not connect or lost connection to server
+java.io.IOException: Connection reset by peer
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:54)
+	at java.base/sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:137)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:102)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:58)
+	at java.base/sun.nio.ch.SocketChannelImpl.implWrite(SocketChannelImpl.java:566)
+	at java.base/sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:618)
+	at bg.sofia.uni.fmi.mjt.client.FoodAnalyzerClient.sendRequest(FoodAnalyzerClient.java:90)
+	at bg.sofia.uni.fmi.mjt.client.FoodAnalyzerClient.start(FoodAnalyzerClient.java:57)
+	at Main.main(Main.java:16)
+
