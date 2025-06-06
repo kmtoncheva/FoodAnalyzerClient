@@ -25,5 +25,7 @@ public final class ClientMessagesConstants {
     public static final String NOT_A_REG_FILE_MSG = "The specified path does not refer to a regular file.";
     public static final String PERMISSION_MSG = "The file is not readable. Please check its permissions.";
 
+    public static final String MATCHED_FOODS_MSG = "\uD83D\uDD0D All items that matched your searched criteria: ";
+
     private ClientMessagesConstants() {}
 }

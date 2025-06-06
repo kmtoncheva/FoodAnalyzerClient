@@ -2,10 +2,11 @@ package bg.sofia.uni.fmi.mjt.client;
 
 import bg.sofia.uni.fmi.mjt.client.commands.Command;
 import bg.sofia.uni.fmi.mjt.client.commands.CommandFactory;
-import bg.sofia.uni.fmi.mjt.client.dto.ClientRequestDto;
+import bg.sofia.uni.fmi.mjt.client.dto.request.ClientRequestDto;
 import bg.sofia.uni.fmi.mjt.client.exceptions.InvalidCommandException;
 import bg.sofia.uni.fmi.mjt.client.utils.LoggerConfigUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -25,13 +26,13 @@ import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.SEE_
 import static bg.sofia.uni.fmi.mjt.client.constants.LoggerConstants.SERVER_CONNECTION_ERROR_MSG;
 
 public class FoodAnalyzerClient {
-    private final ByteBuffer byteBuffer;
+    private final ByteBuffer buffer;
 
     private Command command;
     private static final Logger LOGGER = LoggerConfigUtils.createLogger(FoodAnalyzerClient.class.getName());
 
     public FoodAnalyzerClient() {
-        byteBuffer = ByteBuffer.allocate(BUFFER_SIZE);
+        buffer = ByteBuffer.allocateDirect(BUFFER_SIZE);
     }
 
     public void start() {
@@ -83,22 +84,38 @@ public class FoodAnalyzerClient {
 
         String json = request.toJson();
 
-        byteBuffer.clear();
-        byteBuffer.put(json.getBytes(StandardCharsets.UTF_8));
-        byteBuffer.flip();
-        socketChannel.write(byteBuffer);
+        buffer.clear();
+        buffer.put(json.getBytes(StandardCharsets.UTF_8));
+        buffer.flip();
+        socketChannel.write(buffer);
 
         return true;
     }
 
     private String getResponse(SocketChannel socketChannel) throws IOException {
-        byteBuffer.clear();
-        socketChannel.read(byteBuffer);
-        byteBuffer.flip();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        buffer.clear();
 
-        byte[] bytes = new byte[byteBuffer.remaining()];
-        byteBuffer.get(bytes);
+        while (true) {
+            int bytesRead = socketChannel.read(buffer);
+            if (bytesRead == -1) break; // EOF
 
-        return new String(bytes, StandardCharsets.UTF_8);
+            if (bytesRead == 0) {
+                // If non-blocking, you'd wait on a selector
+                break;
+            }
+
+            buffer.flip();
+            byte[] chunk = new byte[buffer.remaining()];
+            buffer.get(chunk);
+            out.write(chunk);
+            buffer.clear();
+
+            // Check if we've reached the end marker (e.g. newline)
+            String dataSoFar = out.toString(StandardCharsets.UTF_8);
+            if (dataSoFar.endsWith("\n")) break;
+        }
+
+        return out.toString(StandardCharsets.UTF_8);
     }
 }

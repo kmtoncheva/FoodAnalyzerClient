@@ -1,6 +1,6 @@
 package bg.sofia.uni.fmi.mjt.client.commands;
 
-import bg.sofia.uni.fmi.mjt.client.dto.ClientRequestDto;
+import bg.sofia.uni.fmi.mjt.client.dto.request.ClientRequestDto;
 
 public interface Command {
     void printOutputToClient(String jsonResponse);

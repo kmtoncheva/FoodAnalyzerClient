@@ -15,7 +15,8 @@ import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.NOT_
 import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.PERMISSION_MSG;
 
 public final class FileUtils {
-    private FileUtils() { }
+    private FileUtils() {
+    }
 
     public static void validateImagePath(String pathName) throws InvalidFilePathException {
         if (pathName == null || pathName.isBlank()) {

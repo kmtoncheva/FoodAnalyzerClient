@@ -1,4 +1,4 @@
-package bg.sofia.uni.fmi.mjt.client.dto;
+package bg.sofia.uni.fmi.mjt.client.dto.request;
 
 import com.google.gson.Gson;
 

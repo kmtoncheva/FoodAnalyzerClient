@@ -12,7 +12,8 @@ import static bg.sofia.uni.fmi.mjt.client.constants.LoggerConstants.PATH_NAME;
 import static bg.sofia.uni.fmi.mjt.client.constants.LoggerConstants.SETUP_ERROR_MSG;
 
 public final class LoggerConfigUtils {
-    private LoggerConfigUtils() {}
+    private LoggerConfigUtils() {
+    }
 
     public static Logger createLogger(String name) {
         Logger logger = Logger.getLogger(name);

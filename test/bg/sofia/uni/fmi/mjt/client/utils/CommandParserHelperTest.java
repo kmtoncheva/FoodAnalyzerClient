@@ -1,6 +1,6 @@
 package bg.sofia.uni.fmi.mjt.client.utils;
 
-import bg.sofia.uni.fmi.mjt.client.dto.BarcodeRequestDto;
+import bg.sofia.uni.fmi.mjt.client.dto.model.BarcodeDto;
 import bg.sofia.uni.fmi.mjt.client.exceptions.InvalidCommandException;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mockStatic;
 
 public class CommandParserHelperTest {
     @Test
@@ -69,7 +68,7 @@ public class CommandParserHelperTest {
     @Test
     public void testParseBarcodeCommandWithValidCodeOnly() throws InvalidCommandException{
         String[] input = {"--code=123456"};
-        BarcodeRequestDto result = CommandParserHelper.parseBarcodeCommand(input);
+        BarcodeDto result = CommandParserHelper.parseBarcodeCommand(input);
         assertEquals("123456", result.code(), "Code should be parsed correctly");
         assertNull(result.imagePath(), "When no image param exists it should return null");
     }

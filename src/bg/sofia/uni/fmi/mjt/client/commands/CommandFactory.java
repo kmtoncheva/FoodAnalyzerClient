@@ -1,6 +1,6 @@
 package bg.sofia.uni.fmi.mjt.client.commands;
 
-import bg.sofia.uni.fmi.mjt.client.dto.BarcodeRequestDto;
+import bg.sofia.uni.fmi.mjt.client.dto.model.BarcodeDto;
 import bg.sofia.uni.fmi.mjt.client.exceptions.InvalidCommandException;
 import bg.sofia.uni.fmi.mjt.client.utils.CommandParserHelper;
 
@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.HELP_MSG;
 import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.UNRECOGNIZED_CMD_MSG;
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.GET_FOOD_BY_BARCODE_CMD;
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.GET_FOOD_CMD;
@@ -46,7 +47,7 @@ public final class CommandFactory {
 
             return createComplexCmd(Arrays.copyOfRange(tokens, PARAM_TOKEN_INDEX, tokensCount));
         } else {
-            throw new InvalidCommandException(UNRECOGNIZED_CMD_MSG + input);
+            throw new InvalidCommandException(UNRECOGNIZED_CMD_MSG + input + System.lineSeparator() + HELP_MSG);
         }
     }
 
@@ -59,13 +60,13 @@ public final class CommandFactory {
             .orElse(null);
 
         if (cmd == null) {
-            throw new InvalidCommandException(UNRECOGNIZED_CMD_MSG + command);
+            throw new InvalidCommandException(UNRECOGNIZED_CMD_MSG + command + System.lineSeparator() + HELP_MSG);
         }
         return cmd;
     }
 
     private static Command createComplexCmd(String[] tokens) throws InvalidCommandException {
-        BarcodeRequestDto params = CommandParserHelper.parseBarcodeCommand(tokens);
+        BarcodeDto params = CommandParserHelper.parseBarcodeCommand(tokens);
 
         return new GetFoodByBarcodeCommand(params);
     }
