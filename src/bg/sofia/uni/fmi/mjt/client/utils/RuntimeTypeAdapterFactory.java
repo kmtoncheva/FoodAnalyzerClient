@@ -34,7 +34,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
 
     /**
      * Creates a new runtime type adapter for {@code baseType} using {@code typeFieldName} as the type
-     * field name. Type field names are case sensitive.
+     * field name. Type field names are case-sensitive.
      *
      * @param maintainType true if the type field should be included in deserialized objects
      */
@@ -45,7 +45,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
 
     /**
      * Creates a new runtime type adapter for {@code baseType} using {@code typeFieldName} as the type
-     * field name. Type field names are case sensitive.
+     * field name. Type field names are case-sensitive.
      */
     public static <T> RuntimeTypeAdapterFactory<T> of(Class<T> baseType, String typeFieldName) {
         return new RuntimeTypeAdapterFactory<>(baseType, typeFieldName, false);
@@ -88,7 +88,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
 
     /**
      * Registers {@code type} identified by its {@link Class#getSimpleName simple name}. Labels are
-     * case sensitive.
+     * case-sensitive.
      *
      * @throws IllegalArgumentException if either {@code type} or its simple name have already been
      *                                  registered on this type adapter.

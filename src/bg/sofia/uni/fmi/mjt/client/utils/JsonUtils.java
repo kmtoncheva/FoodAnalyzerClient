@@ -3,8 +3,9 @@ package bg.sofia.uni.fmi.mjt.client.utils;
 import bg.sofia.uni.fmi.mjt.client.dto.model.FoodItemDto;
 import bg.sofia.uni.fmi.mjt.client.dto.model.SearchFoodItemDto;
 import bg.sofia.uni.fmi.mjt.client.dto.response.ServerResponseDto;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
+
+import java.lang.reflect.Type;
 
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.TYPE_FIELD_NAME;
 
@@ -15,12 +16,14 @@ public class JsonUtils {
                                                         String searchType,
                                                         Class<? extends FoodItemDto> foodType) {
         GSON = new GsonBuilder()
-            .registerTypeAdapterFactory(
-                RuntimeTypeAdapterFactory
-                    .of(FoodItemDto.class, TYPE_FIELD_NAME)
-                    .registerSubtype(foodType, searchType)
-            )
-            .create();
+                .registerTypeAdapter(FoodItemDto.class, new JsonDeserializer<FoodItemDto>() {
+                    @Override
+                    public FoodItemDto deserialize(JsonElement json, Type typeOfT,
+                                                   JsonDeserializationContext context) throws JsonParseException {
+                        return context.deserialize(json, foodType);
+                    }
+                })
+                .create();
 
         return GSON.fromJson(jsonResponse, ServerResponseDto.class);
     }

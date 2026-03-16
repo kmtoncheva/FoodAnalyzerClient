@@ -9,6 +9,7 @@ public final class ClientMessagesConstants {
 
     public static final String HELP_MSG = "Type 'help' to see available commands.";
     public static final String NO_COMMAND_MSG = "No command entered. ";
+    public static final String NO_FOODS_FOUND_MSG = "No foods found for the given barcode.";
     public static final String UNRECOGNIZED_CMD_MSG = "Unrecognized command: ";
     public static final String INVALID_PARAMS_FORMAT_MSG =
         "Invalid parameter format: expected '--code=value' or '--img=path'.";
@@ -26,6 +27,9 @@ public final class ClientMessagesConstants {
     public static final String PERMISSION_MSG = "The file is not readable. Please check its permissions.";
 
     public static final String MATCHED_FOODS_MSG = "\uD83D\uDD0D All items that matched your searched criteria: ";
+
+    public static final String PROMPT_ARROW = ">>> ";
+    public static final String INPUT_PROMPT = "Enter command";
 
     private ClientMessagesConstants() {}
 }

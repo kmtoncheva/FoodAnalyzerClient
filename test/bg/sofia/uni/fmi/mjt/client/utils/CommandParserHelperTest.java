@@ -4,10 +4,7 @@ import bg.sofia.uni.fmi.mjt.client.dto.model.BarcodeDto;
 import bg.sofia.uni.fmi.mjt.client.exceptions.InvalidCommandException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandParserHelperTest {
     @Test
@@ -114,8 +111,4 @@ public class CommandParserHelperTest {
         assertThrows(InvalidCommandException.class,
             () -> CommandParserHelper.parseBarcodeCommand(null));
     }
-
-    // --code123
-    // --img "hello world"
-    // --img=
 }

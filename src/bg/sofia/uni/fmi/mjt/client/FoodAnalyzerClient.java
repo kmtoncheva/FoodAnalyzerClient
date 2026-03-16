@@ -19,10 +19,7 @@ import java.util.logging.Logger;
 import static bg.sofia.uni.fmi.mjt.client.constants.ClientAttrConstants.BUFFER_SIZE;
 import static bg.sofia.uni.fmi.mjt.client.constants.ClientAttrConstants.SERVER_HOST;
 import static bg.sofia.uni.fmi.mjt.client.constants.ClientAttrConstants.SERVER_PORT;
-import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.GREETING_MSG;
-import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.HELP_MSG;
-import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.NETWORK_CONNECTION_PROBLEM_MSG;
-import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.SEE_LOGS_MSG;
+import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.*;
 import static bg.sofia.uni.fmi.mjt.client.constants.LoggerConstants.SERVER_CONNECTION_ERROR_MSG;
 
 public class FoodAnalyzerClient {
@@ -43,7 +40,8 @@ public class FoodAnalyzerClient {
             System.out.println(GREETING_MSG + HELP_MSG);
 
             while(true) {
-                String input = scanner.nextLine();
+                System.out.print(INPUT_PROMPT + PROMPT_ARROW);
+                String input = scanner.nextLine().trim();
                 String response = null;
 
                 try {
@@ -72,14 +70,14 @@ public class FoodAnalyzerClient {
     }
 
     private Command parseCommand(String input) throws InvalidCommandException {
-        return CommandFactory.create(input); // can return one of the 5 cmds or throw an exception
+        return CommandFactory.create(input);
     }
 
 
     private boolean sendRequest(SocketChannel socketChannel, Command command) throws IOException {
         ClientRequestDto request = command.getRequest();
         if (request == null) {
-            return false; // Nothing to send, e.g., help command
+            return false;
         }
 
         String json = request.toJson();
