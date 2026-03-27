@@ -14,10 +14,32 @@ import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.NOT_
 import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.NOT_A_REG_FILE_MSG;
 import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.PERMISSION_MSG;
 
+/**
+ * A utility class providing helper methods for file path validation.
+ * <p>
+ * Used to validate image file paths provided by users for barcode scanning operations.
+ * Ensures that paths are absolute, exist, are regular files, and are readable.
+ */
 public final class FileUtils {
     private FileUtils() {
     }
 
+    /**
+     * Validates that the specified image path is valid and accessible.
+     * <p>
+     * Performs the following checks:
+     * <ul>
+     *   <li>Path is not {@code null} or blank</li>
+     *   <li>Path has valid syntax</li>
+     *   <li>Path is absolute</li>
+     *   <li>File exists at the specified path</li>
+     *   <li>Path refers to a regular file (not a directory)</li>
+     *   <li>File is readable</li>
+     * </ul>
+     *
+     * @param pathName the file path string to validate
+     * @throws InvalidFilePathException if any validation check fails, with a descriptive message
+     */
     public static void validateImagePath(String pathName) throws InvalidFilePathException {
         if (pathName == null || pathName.isBlank()) {
             throw new InvalidFilePathException(pathName, EMPTY_PATH_MSG);

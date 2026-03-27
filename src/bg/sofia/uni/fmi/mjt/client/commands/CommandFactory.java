@@ -2,7 +2,6 @@ package bg.sofia.uni.fmi.mjt.client.commands;
 
 import bg.sofia.uni.fmi.mjt.client.dto.model.BarcodeDto;
 import bg.sofia.uni.fmi.mjt.client.exceptions.InvalidCommandException;
-import bg.sofia.uni.fmi.mjt.client.utils.CommandParserHelper;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -22,12 +21,34 @@ import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.QUIT_CMD;
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.THREE_TOKENS;
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.TWO_TOKENS;
 
+/**
+ * A factory class responsible for creating {@link Command} instances based on user input.
+ * <p>
+ * Parses the user's command string and instantiates the appropriate command object.
+ * Supported commands include:
+ * <ul>
+ *   <li>{@code "get-food"} - searches for food items by keywords</li>
+ *   <li>{@code "get-food-report"} - retrieves a detailed report by FDC ID</li>
+ *   <li>{@code "get-food-by-barcode"} - looks up food by barcode code or image</li>
+ *   <li>{@code "help"} - displays available commands</li>
+ *   <li>{@code "quit"} - terminates the client application</li>
+ * </ul>
+ * If an unrecognized command is provided, an {@link InvalidCommandException} is thrown.
+ */
 public final class CommandFactory {
     private static final Map<String, Supplier<Command>> simpleCommands = Map.of(
         QUIT_CMD, QuitCommand::new,
         HELP_CMD, HelpCommand::new
     );
 
+    /**
+     * Parses the user input string and creates the corresponding {@link Command} instance.
+     *
+     * @param input the raw user input string containing the command and arguments
+     * @return a concrete {@link Command} instance corresponding to the parsed input
+     * @throws InvalidCommandException if the command is not recognized, has invalid syntax,
+     *                                 or contains malformed parameters
+     */
     public static Command create(String input) throws InvalidCommandException {
         String[] tokens = CommandParserHelper.splitClientInput(input);
         String keyword = tokens[KEYWORD_TOKEN_INDEX];
@@ -54,6 +75,9 @@ public final class CommandFactory {
     private CommandFactory() {
     }
 
+    /**
+     * Creates commands "quit" or "help".
+     */
     private static Command createSimpleCmd(String command) throws InvalidCommandException {
         Command cmd = Optional.ofNullable(simpleCommands.get(command.toLowerCase()))
             .map(Supplier::get)
@@ -65,6 +89,9 @@ public final class CommandFactory {
         return cmd;
     }
 
+    /**
+     * Parses the Barcode params and creates the command.
+     */
     private static Command createComplexCmd(String[] tokens) throws InvalidCommandException {
         BarcodeDto params = CommandParserHelper.parseBarcodeCommand(tokens);
 

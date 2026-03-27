@@ -1,17 +1,31 @@
 package bg.sofia.uni.fmi.mjt.client.utils;
 
 import bg.sofia.uni.fmi.mjt.client.dto.model.FoodItemDto;
-import bg.sofia.uni.fmi.mjt.client.dto.model.SearchFoodItemDto;
 import bg.sofia.uni.fmi.mjt.client.dto.response.ServerResponseDto;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
-import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.TYPE_FIELD_NAME;
-
+/**
+ * A utility class providing helper methods for JSON parsing and deserialization.
+ * <p>
+ * Uses Gson to deserialize server responses into appropriate DTO objects.
+ * Supports polymorphic deserialization of {@link FoodItemDto} based on the response type.
+ */
 public class JsonUtils {
     private static Gson GSON;
 
+    /**
+     * Parses a JSON server response string into a {@link ServerResponseDto} object.
+     * <p>
+     * Configures Gson with a custom type adapter to deserialize {@link FoodItemDto}
+     * instances into the appropriate concrete type based on the search type.
+     *
+     * @param jsonResponse the JSON response string from the server
+     * @param searchType   the type of search performed (e.g., "search", "report")
+     * @param foodType     the concrete {@link FoodItemDto} class to deserialize into
+     * @return a {@link ServerResponseDto} containing the parsed response data
+     */
     public static ServerResponseDto parseServerResponse(String jsonResponse,
                                                         String searchType,
                                                         Class<? extends FoodItemDto> foodType) {

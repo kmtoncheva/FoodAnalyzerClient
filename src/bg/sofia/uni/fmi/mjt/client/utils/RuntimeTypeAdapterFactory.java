@@ -15,6 +15,15 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * A Gson type adapter factory for polymorphic type handling.
+ * <p>
+ * This utility class enables Gson to deserialize JSON into different concrete types
+ * based on a type discriminator field in the JSON. Used for deserializing
+ * {@link bg.sofia.uni.fmi.mjt.client.dto.model.FoodItemDto} instances into their appropriate concrete implementations.
+ * <p>
+ * This is a third-party utility class adapted for use in the Food Analyzer client.
+ */
 public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
     private final Class<?> baseType;
     private final String typeFieldName;
@@ -69,7 +78,7 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
     }
 
     /**
-     * Registers {@code type} identified by {@code label}. Labels are case sensitive.
+     * Registers {@code type} identified by {@code label}. Labels are case-sensitive.
      *
      * @throws IllegalArgumentException if either {@code type} or {@code label} have already been
      *                                  registered on this type adapter.

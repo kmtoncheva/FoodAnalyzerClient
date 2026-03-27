@@ -1,4 +1,4 @@
-package bg.sofia.uni.fmi.mjt.client.utils;
+package bg.sofia.uni.fmi.mjt.client.commands;
 
 import bg.sofia.uni.fmi.mjt.client.dto.model.BarcodeDto;
 import bg.sofia.uni.fmi.mjt.client.exceptions.InvalidCommandException;

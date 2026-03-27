@@ -13,13 +13,24 @@ import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.MATC
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.GET_FOOD_CMD;
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.SEARCH_TYPE_LABEL;
 
-public class GetFoodCommand implements Command {
-    private String[] tokens;
+/**
+ * A command that searches for food items by keywords.
+ * <p>
+ * Sends a search request to the server with the provided keywords and displays
+ * the matching food items to the user. Implements {@link Command} to handle
+ * the complete request-response cycle.
+ */
+public final class GetFoodCommand implements Command {
+    private final String[] tokens;
 
     public GetFoodCommand(String[] tokens) {
         this.tokens = tokens;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param jsonResponse the JSON response string received from the server
+     */
     @Override
     public void printOutputToClient(String jsonResponse) {
         ServerResponseDto serverResponse = JsonUtils.parseServerResponse(jsonResponse, SEARCH_TYPE_LABEL,
@@ -39,6 +50,10 @@ public class GetFoodCommand implements Command {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @return the request that would be sent to the server.
+     */
     @Override
     public ClientRequestDto getRequest() {
         return new ClientRequestDto(GET_FOOD_CMD, tokens);
