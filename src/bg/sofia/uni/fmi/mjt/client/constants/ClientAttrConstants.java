@@ -9,5 +9,5 @@ public final class ClientAttrConstants {
     public static final String SERVER_HOST = "localhost";
     public static final int BUFFER_SIZE = 1024;
 
-    private ClientAttrConstants() {}
+    private ClientAttrConstants() { }
 }

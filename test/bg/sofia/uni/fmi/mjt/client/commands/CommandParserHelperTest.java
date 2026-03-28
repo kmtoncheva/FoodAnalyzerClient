@@ -4,6 +4,9 @@ import bg.sofia.uni.fmi.mjt.client.dto.model.BarcodeDto;
 import bg.sofia.uni.fmi.mjt.client.exceptions.InvalidCommandException;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandParserHelperTest {
@@ -70,21 +73,6 @@ public class CommandParserHelperTest {
         assertNull(result.imagePath(), "When no image param exists it should return null");
     }
 
-//    @Test
-//    public void testParseBarcodeCommandWithValidImageOnly() throws InvalidCommandException{
-//        String[] input = {"--img=/valid/path.jpg"};
-//
-//        try (MockedStatic<FileUtils> mockedFileUtils = mockStatic(FileUtils.class)) {
-//            mockedFileUtils.when(() -> FileUtils.validateImagePath("/some/path/to/image.png"))
-//                .thenAnswer(invocation -> null);
-//
-//
-//        }
-//            BarcodeCommandParams result = CommandParserHelper.parseBarcodeCommand(input);
-//        assertNull(result.code());
-//        assertEquals("/valid/path.jpg", result.imagePath());
-//    }
-
     @Test
     void testParseBarcodeCommandWithDuplicatedCode() {
         String[] input = {"--code=123", "--code=456"};
@@ -110,5 +98,44 @@ public class CommandParserHelperTest {
     void testParseBarcodeCommandWithNullParams() {
         assertThrows(InvalidCommandException.class,
             () -> CommandParserHelper.parseBarcodeCommand(null));
+    }
+
+    @Test
+    void testParseBarcodeCommandWithInvalidFormatMissingEquals() {
+        String[] input = {"--code123456"};
+        assertThrows(InvalidCommandException.class,
+                () -> CommandParserHelper.parseBarcodeCommand(input),
+                "Should throw exception when parameter format is invalid");
+    }
+
+    @Test
+    void testParseBarcodeCommandWithEmptyValue() {
+        String[] input = {"--code="};
+        assertThrows(InvalidCommandException.class,
+                () -> CommandParserHelper.parseBarcodeCommand(input),
+                "Should throw exception when parameter value is empty");
+    }
+
+    @Test
+    void testParseBarcodeCommandWithBothCodeAndImage() throws Exception {
+        // Create a temporary file for testing
+        Path tempFile = Files.createTempFile("test-barcode", ".jpg");
+        try {
+            String[] input = {"--code=123456", "--img=" + tempFile.toAbsolutePath()};
+            BarcodeDto result = CommandParserHelper.parseBarcodeCommand(input);
+
+            assertNotNull(result.code(), "Code should not be null");
+            assertNotNull(result.imagePath(), "Image path should not be null");
+        } finally {
+            Files.deleteIfExists(tempFile);
+        }
+    }
+
+    @Test
+    void testParseBarcodeCommandCaseInsensitiveParameters() throws InvalidCommandException {
+        String[] input = {"--CODE=123456"};
+        BarcodeDto result = CommandParserHelper.parseBarcodeCommand(input);
+
+        assertEquals("123456", result.code(), "Should handle uppercase parameter names");
     }
 }

@@ -2,7 +2,12 @@ package bg.sofia.uni.fmi.mjt.client.utils;
 
 import bg.sofia.uni.fmi.mjt.client.dto.model.FoodItemDto;
 import bg.sofia.uni.fmi.mjt.client.dto.response.ServerResponseDto;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 
@@ -13,7 +18,7 @@ import java.lang.reflect.Type;
  * Supports polymorphic deserialization of {@link FoodItemDto} based on the response type.
  */
 public class JsonUtils {
-    private static Gson GSON;
+    private static Gson gson;
 
     /**
      * Parses a JSON server response string into a {@link ServerResponseDto} object.
@@ -29,7 +34,7 @@ public class JsonUtils {
     public static ServerResponseDto parseServerResponse(String jsonResponse,
                                                         String searchType,
                                                         Class<? extends FoodItemDto> foodType) {
-        GSON = new GsonBuilder()
+        gson = new GsonBuilder()
                 .registerTypeAdapter(FoodItemDto.class, new JsonDeserializer<FoodItemDto>() {
                     @Override
                     public FoodItemDto deserialize(JsonElement json, Type typeOfT,
@@ -39,11 +44,11 @@ public class JsonUtils {
                 })
                 .create();
 
-        return GSON.fromJson(jsonResponse, ServerResponseDto.class);
+        return gson.fromJson(jsonResponse, ServerResponseDto.class);
     }
 
     public static Gson getGson() {
-        return GSON;
+        return gson;
     }
 
     private JsonUtils(String searchType) {

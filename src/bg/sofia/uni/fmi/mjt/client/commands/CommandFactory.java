@@ -36,7 +36,7 @@ import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.TWO_TOKENS;
  * If an unrecognized command is provided, an {@link InvalidCommandException} is thrown.
  */
 public final class CommandFactory {
-    private static final Map<String, Supplier<Command>> simpleCommands = Map.of(
+    private static final Map<String, Supplier<Command>> SIMPLE_COMMANDS = Map.of(
         QUIT_CMD, QuitCommand::new,
         HELP_CMD, HelpCommand::new
     );
@@ -79,7 +79,7 @@ public final class CommandFactory {
      * Creates commands "quit" or "help".
      */
     private static Command createSimpleCmd(String command) throws InvalidCommandException {
-        Command cmd = Optional.ofNullable(simpleCommands.get(command.toLowerCase()))
+        Command cmd = Optional.ofNullable(SIMPLE_COMMANDS.get(command.toLowerCase()))
             .map(Supplier::get)
             .orElse(null);
 

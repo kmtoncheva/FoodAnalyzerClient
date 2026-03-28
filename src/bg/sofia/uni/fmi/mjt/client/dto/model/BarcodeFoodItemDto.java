@@ -1,6 +1,9 @@
 package bg.sofia.uni.fmi.mjt.client.dto.model;
 
-import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.*;
+import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.DESCR_NAME;
+import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.INGREDIENTS_NAME;
+import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.INGR_MISSING_MSG;
+import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.NUTR_MISSING_MSG;
 
 /**
  * A Data Transfer Object (DTO) representing a food item retrieved by barcode lookup.

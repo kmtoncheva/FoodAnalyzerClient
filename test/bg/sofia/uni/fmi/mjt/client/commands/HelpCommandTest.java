@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.HELP_MSG;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HelpCommandTest {
@@ -27,5 +29,17 @@ public class HelpCommandTest {
         } finally {
             System.setOut(originalOut);
         }
+    }
+
+    @Test
+    void testIsTerminatingCommandReturnsFalse() {
+        HelpCommand cmd = new HelpCommand();
+        assertFalse(cmd.isTerminatingCommand(), "HelpCommand should not be terminating");
+    }
+
+    @Test
+    void testGetRequestReturnsNull() {
+        HelpCommand cmd = new HelpCommand();
+        assertNull(cmd.getRequest(), "HelpCommand should return null request");
     }
 }

@@ -1,6 +1,14 @@
 package bg.sofia.uni.fmi.mjt.client.constants;
 
-import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.*;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.BOLD;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.CYAN;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.CYAN_BOLD;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.GREEN;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.GREEN_BOLD;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.PURPLE;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.RESET;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.WHITE;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.YELLOW;
 
 /**
  * Defines constant values related to command parsing, handling, and display formatting.
@@ -153,5 +161,5 @@ public final class CommandConstants {
     // Messages
     public static final String NO_KEY_NUTRIENTS_MSG = "  Nutrient data available but no standard nutrients found.";
 
-    private CommandConstants() {}
+    private CommandConstants() { }
 }

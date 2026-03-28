@@ -1,6 +1,5 @@
 package bg.sofia.uni.fmi.mjt.client.dto.enums;
 
-
 /**
  * An enumeration representing the possible status types of a server response.
  * <p>

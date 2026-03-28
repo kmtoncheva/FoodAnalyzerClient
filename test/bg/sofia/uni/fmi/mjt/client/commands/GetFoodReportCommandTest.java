@@ -2,6 +2,7 @@ package bg.sofia.uni.fmi.mjt.client.commands;
 
 import bg.sofia.uni.fmi.mjt.client.dto.enums.ResponseStatusType;
 import bg.sofia.uni.fmi.mjt.client.dto.model.ReportFoodItemDto;
+import bg.sofia.uni.fmi.mjt.client.dto.request.ClientRequestDto;
 import bg.sofia.uni.fmi.mjt.client.dto.response.ServerResponseDto;
 import bg.sofia.uni.fmi.mjt.client.utils.JsonUtils;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -74,4 +77,19 @@ public class GetFoodReportCommandTest {
             System.setOut(originalOut);
         }
     }
+    @Test
+    void testGetRequestReturnsValidDto() {
+        GetFoodReportCommand cmd = new GetFoodReportCommand("12345");
+        ClientRequestDto request = cmd.getRequest();
+
+        assertNotNull(request, "Request should not be null");
+        assertNotNull(request.toJson(), "Request JSON should not be null");
+    }
+
+    @Test
+    void testIsTerminatingCommandReturnsFalse() {
+        GetFoodReportCommand cmd = new GetFoodReportCommand("12345");
+        assertFalse(cmd.isTerminatingCommand(), "GetFoodReportCommand should not be terminating");
+    }
+
 }

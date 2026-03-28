@@ -12,5 +12,5 @@ public final class LoggerConstants {
 
     public static final String SERVER_CONNECTION_ERROR_MSG = "Client could not connect or lost connection to server";
 
-    private LoggerConstants() {}
+    private LoggerConstants() { }
 }

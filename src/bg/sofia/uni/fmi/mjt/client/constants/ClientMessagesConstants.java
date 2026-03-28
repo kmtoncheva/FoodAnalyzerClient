@@ -1,6 +1,13 @@
 package bg.sofia.uni.fmi.mjt.client.constants;
 
-import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.*;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.BOLD;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.CYAN;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.CYAN_BOLD;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.GREEN_BOLD;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.RED;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.RED_BOLD;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.RESET;
+import static bg.sofia.uni.fmi.mjt.client.constants.ColorConstants.YELLOW;
 
 /**
  * Defines constant values for user-facing messages displayed by the client application.
@@ -90,5 +97,5 @@ public final class ClientMessagesConstants {
     public static final String INPUT_PROMPT =
             BOLD + "Enter command" + RESET;
 
-    private ClientMessagesConstants() {}
+    private ClientMessagesConstants() { }
 }

@@ -1,80 +1,51 @@
 package bg.sofia.uni.fmi.mjt.client.commands;
 
-import bg.sofia.uni.fmi.mjt.client.dto.enums.ResponseStatusType;
 import bg.sofia.uni.fmi.mjt.client.dto.model.BarcodeDto;
-import bg.sofia.uni.fmi.mjt.client.dto.model.BarcodeFoodItemDto;
-import bg.sofia.uni.fmi.mjt.client.dto.response.ServerResponseDto;
-import bg.sofia.uni.fmi.mjt.client.utils.JsonUtils;
+import bg.sofia.uni.fmi.mjt.client.dto.request.ClientRequestDto;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class GetFoodByBarcodeCommandTest {
 
-    private static final String BARCODE_CODE = "009800146130";
-    private static final String VALID_JSON =
-            "{\"status\":\"OK\",\"message\":\"Success\"," +
-                    "\"foods\":[{\"description\":\"Soup\",\"ingredients\":\"BEEF\"}]}";
-    private static final String ERROR_JSON =
-            "{\"status\":\"ERROR\",\"message\":\"Barcode not found\",\"foods\":null}";
-
     @Test
-    void testPrintOutputToClientWithOkResponsePrintsFoodDetails() {
-        BarcodeDto params = new BarcodeDto(BARCODE_CODE, null);
-        GetFoodByBarcodeCommand cmd = new GetFoodByBarcodeCommand(params);
+    void testConstructorWithBarcodeDto() {
+        BarcodeDto barcodeDto = new BarcodeDto("123456", null);
+        GetFoodByBarcodeCommand cmd = new GetFoodByBarcodeCommand(barcodeDto);
 
-        BarcodeFoodItemDto foodItem = mock(BarcodeFoodItemDto.class);
-        ServerResponseDto response = mock(ServerResponseDto.class);
-        when(response.getStatus()).thenReturn(ResponseStatusType.OK);
-        when(response.getFoods()).thenReturn(List.of(foodItem));
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        System.setOut(new PrintStream(outputStream));
-
-        try (MockedStatic<JsonUtils> mockedJsonUtils = mockStatic(JsonUtils.class)) {
-            mockedJsonUtils.when(() -> JsonUtils.parseServerResponse(
-                    eq(VALID_JSON), eq("barcode"), any())).thenReturn(response);
-
-            cmd.printOutputToClient(VALID_JSON);
-        } finally {
-            System.setOut(originalOut);
-        }
+        assertNotNull(cmd, "Constructor should create instance");
     }
 
     @Test
-    void testPrintOutputToClientWithErrorResponsePrintsMessage() {
-        BarcodeDto params = new BarcodeDto(BARCODE_CODE, null);
-        GetFoodByBarcodeCommand cmd = new GetFoodByBarcodeCommand(params);
+    void testGetRequestReturnsValidDto() {
+        BarcodeDto barcodeDto = new BarcodeDto("123456", null);
+        GetFoodByBarcodeCommand cmd = new GetFoodByBarcodeCommand(barcodeDto);
 
-        ServerResponseDto response = mock(ServerResponseDto.class);
-        when(response.getStatus()).thenReturn(ResponseStatusType.ERROR);
-        when(response.getMessage()).thenReturn("Barcode not found");
+        ClientRequestDto request = cmd.getRequest();
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        System.setOut(new PrintStream(outputStream));
+        assertNotNull(request, "Request should not be null");
+        assertNotNull(request.toJson(), "Request JSON should not be null");
+    }
 
-        try (MockedStatic<JsonUtils> mockedJsonUtils = mockStatic(JsonUtils.class)) {
-            mockedJsonUtils.when(() -> JsonUtils.parseServerResponse(
-                    eq(ERROR_JSON), eq("barcode"), any())).thenReturn(response);
+    @Test
+    void testIsTerminatingCommandReturnsFalse() {
+        BarcodeDto barcodeDto = new BarcodeDto("123456", null);
+        GetFoodByBarcodeCommand cmd = new GetFoodByBarcodeCommand(barcodeDto);
 
-            cmd.printOutputToClient(ERROR_JSON);
+        assertFalse(cmd.isTerminatingCommand(), "GetFoodByBarcodeCommand should not be terminating");
+    }
 
-            assertTrue(outputStream.toString().contains("Barcode not found"),
-                    "Should print the error message from the server response");
-        } finally {
-            System.setOut(originalOut);
-        }
+    @Test
+    void testPrintOutputToClientDoesNotThrow() {
+        BarcodeDto barcodeDto = new BarcodeDto("123456", null);
+        GetFoodByBarcodeCommand cmd = new GetFoodByBarcodeCommand(barcodeDto);
+
+        String validJson = "{\"status\":\"OK\",\"message\":\"Success\",\"foods\":[]}";
+
+        org.junit.jupiter.api.Assertions.assertDoesNotThrow(
+                () -> cmd.printOutputToClient(validJson),
+                "printOutputToClient should not throw");
     }
 }

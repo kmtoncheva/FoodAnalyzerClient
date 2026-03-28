@@ -81,15 +81,14 @@ public class FoodAnalyzerClient {
 
             System.out.println(GREETING_MSG + HELP_MSG);
 
-            while(true) {
+            while (true) {
                 System.out.print(INPUT_PROMPT + PROMPT_ARROW);
                 String input = scanner.nextLine().trim();
                 String response = null;
 
                 try {
                     command = parseCommand(input);
-                }
-                catch (InvalidCommandException e) {
+                } catch (InvalidCommandException e) {
                     System.out.println(e.getMessage());
                     continue;
                 }
@@ -100,12 +99,11 @@ public class FoodAnalyzerClient {
 
                 command.printOutputToClient(response);
 
-                if(command.isTerminatingCommand()) {
+                if (command.isTerminatingCommand()) {
                     break;
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.SEVERE, SERVER_CONNECTION_ERROR_MSG, e);
             System.out.println(NETWORK_CONNECTION_PROBLEM_MSG + SEE_LOGS_MSG);
         }

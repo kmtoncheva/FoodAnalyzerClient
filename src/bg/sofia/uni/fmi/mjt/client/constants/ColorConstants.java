@@ -23,5 +23,5 @@ public final class ColorConstants {
     public static final String GREEN_BOLD = "\u001B[1;32m";
     public static final String CYAN_BOLD = "\u001B[1;36m";
 
-    private ColorConstants() {}
+    private ColorConstants() { }
 }

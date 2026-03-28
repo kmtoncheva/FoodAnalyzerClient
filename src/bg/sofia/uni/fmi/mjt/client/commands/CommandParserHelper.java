@@ -53,49 +53,66 @@ public final class CommandParserHelper {
      *                                 or contain unknown parameter names
      */
     public static BarcodeDto parseBarcodeCommand(String[] params) throws InvalidCommandException {
+        validateParams(params);
+
         String code = null;
         String imagePath = null;
-
-        if (params == null) {
-            throw new InvalidCommandException(MISSING_PARAMS_MSG);
-        }
 
         for (String token : params) {
             String lowerToken = token.toLowerCase();
             int eqIndex = token.indexOf(PARAMS_SPLIT_SYMBOL);
 
-            if (eqIndex == INVALID_TOKEN_INDEX || eqIndex == token.length() - ONE_TOKEN) {
-                throw new InvalidCommandException(INVALID_PARAMS_FORMAT_MSG);
-            }
-
+            validateTokenFormat(token, eqIndex);
             String substringPattern = token.substring(eqIndex + ONE_TOKEN);
 
             if (lowerToken.startsWith(CODE_PARAM)) {
-                if (code != null) {
-                    throw new InvalidCommandException(DUPLICATE_CODE_PARAM_MSG);
-                }
-
-                code = substringPattern;
+                code = handleCodeParameter(code, substringPattern);
             } else if (lowerToken.startsWith(IMG_PARAM)) {
-                if (imagePath != null) {
-                    throw new InvalidCommandException(DUPLICATE_IMG_PARAM_MSG);
-                }
-
-                imagePath = substringPattern;
-                try {
-                    FileUtils.validateImagePath(imagePath);
-                } catch (InvalidFilePathException e) {
-                    throw new InvalidCommandException(e.getMessage(), e);
-                }
+                imagePath = handleImageParameter(imagePath, substringPattern);
             } else {
                 throw new InvalidCommandException(String.format(UNKNOWN_PARAM_MSG, token));
             }
         }
+
+        validateAtLeastOneParam(code, imagePath);
+        return new BarcodeDto(code, imagePath);
+    }
+
+    private static void validateParams(String[] params) throws InvalidCommandException {
+        if (params == null) {
+            throw new InvalidCommandException(MISSING_PARAMS_MSG);
+        }
+    }
+
+    private static void validateTokenFormat(String token, int eqIndex) throws InvalidCommandException {
+        if (eqIndex == INVALID_TOKEN_INDEX || eqIndex == token.length() - ONE_TOKEN) {
+            throw new InvalidCommandException(INVALID_PARAMS_FORMAT_MSG);
+        }
+    }
+
+    private static String handleCodeParameter(String code, String value) throws InvalidCommandException {
+        if (code != null) {
+            throw new InvalidCommandException(DUPLICATE_CODE_PARAM_MSG);
+        }
+        return value;
+    }
+
+    private static String handleImageParameter(String imagePath, String value) throws InvalidCommandException {
+        if (imagePath != null) {
+            throw new InvalidCommandException(DUPLICATE_IMG_PARAM_MSG);
+        }
+        try {
+            FileUtils.validateImagePath(value);
+        } catch (InvalidFilePathException e) {
+            throw new InvalidCommandException(e.getMessage(), e);
+        }
+        return value;
+    }
+
+    private static void validateAtLeastOneParam(String code, String imagePath) throws InvalidCommandException {
         if (code == null && imagePath == null) {
             throw new InvalidCommandException(MISSING_PARAMS_MSG);
         }
-
-        return new BarcodeDto(code, imagePath);
     }
 
     private CommandParserHelper() {
