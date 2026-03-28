@@ -12,10 +12,13 @@ import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.MISS
 import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.NO_COMMAND_MSG;
 import static bg.sofia.uni.fmi.mjt.client.constants.ClientMessagesConstants.UNKNOWN_PARAM_MSG;
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.CODE_PARAM;
+import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.DOUBLE_QUOTE;
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.IMG_PARAM;
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.INVALID_TOKEN_INDEX;
+import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.MIN_QUOTED_STRING_LENGTH;
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.ONE_TOKEN;
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.PARAMS_SPLIT_SYMBOL;
+import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.QUOTE_START_INDEX;
 import static bg.sofia.uni.fmi.mjt.client.constants.CommandConstants.WHITESPACE_SPLIT_REGEX;
 
 /**
@@ -46,6 +49,7 @@ public final class CommandParserHelper {
      * <p>
      * Expects parameters in the format {@code --code=value} or {@code --img=path}.
      * Validates that at least one parameter is provided and that no duplicates exist.
+     * Automatically strips surrounding double quotes from values to support paths.
      *
      * @param params an array of parameter tokens to parse
      * @return a {@link BarcodeDto} containing the parsed barcode code and/or image path
@@ -64,6 +68,8 @@ public final class CommandParserHelper {
 
             validateTokenFormat(token, eqIndex);
             String substringPattern = token.substring(eqIndex + ONE_TOKEN);
+
+            substringPattern = stripSurroundingQuotes(substringPattern);
 
             if (lowerToken.startsWith(CODE_PARAM)) {
                 code = handleCodeParameter(code, substringPattern);
@@ -113,6 +119,18 @@ public final class CommandParserHelper {
         if (code == null && imagePath == null) {
             throw new InvalidCommandException(MISSING_PARAMS_MSG);
         }
+    }
+
+    private static String stripSurroundingQuotes(String value) {
+        if (value == null || value.length() < MIN_QUOTED_STRING_LENGTH) {
+            return value;
+        }
+
+        if (value.charAt(0) == DOUBLE_QUOTE && value.charAt(value.length() - ONE_TOKEN) == DOUBLE_QUOTE) {
+            return value.substring(QUOTE_START_INDEX, value.length() - ONE_TOKEN);
+        }
+
+        return value;
     }
 
     private CommandParserHelper() {

@@ -138,4 +138,69 @@ public class CommandParserHelperTest {
 
         assertEquals("123456", result.code(), "Should handle uppercase parameter names");
     }
+
+    @Test
+    void testParseBarcodeCommandWithQuotedImagePath() throws Exception {
+        Path tempFile = Files.createTempFile("test-barcode", ".jpg");
+        try {
+            String quotedPath = "\"" + tempFile.toAbsolutePath() + "\"";
+            String[] input = {"--img=" + quotedPath};
+            BarcodeDto result = CommandParserHelper.parseBarcodeCommand(input);
+
+            assertEquals(tempFile.toAbsolutePath().toString(), result.imagePath(),
+                    "Quoted image path should have quotes stripped");
+            assertNull(result.code(), "Code should be null when only image is provided");
+        } finally {
+            Files.deleteIfExists(tempFile);
+        }
+    }
+
+    @Test
+    void testParseBarcodeCommandWithQuotedCode() throws InvalidCommandException {
+        String[] input = {"--code=\"123456\""};
+        BarcodeDto result = CommandParserHelper.parseBarcodeCommand(input);
+
+        assertEquals("123456", result.code(), "Quoted code should have quotes stripped");
+        assertNull(result.imagePath(), "Image path should be null when only code is provided");
+    }
+
+    @Test
+    void testParseBarcodeCommandWithUnquotedImagePath() throws Exception {
+        Path tempFile = Files.createTempFile("test-barcode", ".jpg");
+        try {
+            String[] input = {"--img=" + tempFile.toAbsolutePath()};
+            BarcodeDto result = CommandParserHelper.parseBarcodeCommand(input);
+
+            assertEquals(tempFile.toAbsolutePath().toString(), result.imagePath(),
+                    "Unquoted image path should work as before (backward compatibility)");
+        } finally {
+            Files.deleteIfExists(tempFile);
+        }
+    }
+
+    @Test
+    void testParseBarcodeCommandWithSingleQuote() throws Exception {
+        // Edge case: only one quote should not be stripped
+        Path tempFile = Files.createTempFile("test-barcode", ".jpg");
+        try {
+            String pathWithQuote = "\"" + tempFile.toAbsolutePath();
+            String[] input = {"--img=" + pathWithQuote};
+
+            // This should fail validation because the path with a single quote is invalid
+            assertThrows(InvalidCommandException.class,
+                    () -> CommandParserHelper.parseBarcodeCommand(input),
+                    "Path with only one quote should fail validation");
+        } finally {
+            Files.deleteIfExists(tempFile);
+        }
+    }
+
+    @Test
+    void testParseBarcodeCommandWithEmptyQuotes() {
+        String[] input = {"--img=\"\""};
+
+        assertThrows(InvalidCommandException.class,
+                () -> CommandParserHelper.parseBarcodeCommand(input),
+                "Empty quoted string should fail validation");
+    }
 }

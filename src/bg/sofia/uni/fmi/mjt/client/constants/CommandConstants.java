@@ -47,6 +47,11 @@ public final class CommandConstants {
     public static final String CODE_PARAM = "--code";
     public static final String IMG_PARAM = "--img";
 
+    // Quote handling constants
+    public static final char DOUBLE_QUOTE = '"';
+    public static final int MIN_QUOTED_STRING_LENGTH = 2;
+    public static final int QUOTE_START_INDEX = 1;
+
     // Help message with colors and emojis
     public static final String DISPLAY_ALL_COMMANDS_MSG =
             CYAN_BOLD + "\n╔════════════════════════════════════════════════════════════════╗\n" + RESET +
@@ -71,7 +76,7 @@ public final class CommandConstants {
                     "     " + YELLOW + "--img=" + RESET + WHITE + "<image_file>" + RESET +
                     "    " + WHITE + "Look up food by barcode image" + RESET + "\n" +
                     "     " + PURPLE + "Example: " + RESET
-                    + "get-food-by-barcode --C:\\Users\\<user>\\JAVA\\FoodAnalyzerClient\\upc-barcode.gif" +
+                    + "get-food-by-barcode --img=C:\\Users\\<user>\\JAVA\\FoodAnalyzerClient\\upc-barcode.gif" +
                     "\n" +
                     GREEN + "  ❓ " + CYAN_BOLD + "help" + RESET + "\n" +
                     "     " + WHITE + "Show this help message again" + RESET + "\n" +
